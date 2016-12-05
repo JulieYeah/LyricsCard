@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">CreateLyricsCard</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_confirm">Confirm</string>
+    <string name="fixed_lyrics">No Lyrics</string>
+    <string name="title_activity_customize_card">Customize</string>
+</resources>
