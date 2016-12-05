@@ -413,3 +413,5 @@ public class CustomizeCardActivity extends AppCompatActivity {
         return bitmap;
     }
 }
+
+//test
