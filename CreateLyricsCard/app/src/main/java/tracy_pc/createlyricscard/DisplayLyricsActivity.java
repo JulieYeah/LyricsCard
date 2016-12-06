@@ -38,6 +38,7 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
     private List<ItemBean> dataList;
     private List<ItemBean> selectList;
     private Adapter adapter;
+    static Toolbar toolbar;
     // 是否显示CheckBox标识
     private static boolean isShow;
     //记录选择的歌词行数
@@ -49,8 +50,6 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
     private LinearLayout bottom_Menu;
 
     private String[] str_Lyrics;
-    private int startNum = 0;
-    private int arrayLength = 0;
     private ArrayAdapter<String> lyrics_adapter;
     private String songName;
     private String singer;
@@ -64,7 +63,7 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_lyrics);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         listView = (ListView) findViewById(R.id.listView);
@@ -89,10 +88,7 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
                 }
             }
         }).start();
-
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -155,7 +151,10 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
                 Log.i("tag","style 1");
                 choosen_Lyrics = "";
                 countRow = selectList.size();
-                if(countRow > 4){
+                if(countRow == 0){
+                    Toast.makeText(getBaseContext(),"Please select the lyrics !", Toast.LENGTH_SHORT).show();
+                }
+                else if(countRow > 4){
                     Toast.makeText(getBaseContext(),"Rows must be less than 5 !", Toast.LENGTH_SHORT).show();
                 }else{
                     for(int i = 0;i < countRow;i++){
@@ -173,7 +172,23 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
         textView_Style2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //网易云音乐风格创建卡片
                 Log.i("tag","style 2");
+                choosen_Lyrics = "";
+                countRow = selectList.size();
+                if(countRow == 0){
+                    Toast.makeText(getBaseContext(),"Please select the lyrics !", Toast.LENGTH_SHORT).show();
+                }else {
+                    for (int i = 0; i < countRow; i++) {
+                        String s = selectList.get(i).getMsg() + "\n";
+                        choosen_Lyrics += s;
+                    }
+                }
+                Intent intent = new Intent(getBaseContext(),CustomizeTwoActivity.class);
+                //传入选中的歌词
+                intent.putExtra("extraLyrics",choosen_Lyrics);
+                intent.putExtra("extraInfo",choosen_songInfo);
+                startActivity(intent);
             }
         });
         textView_Style3.setOnClickListener(new View.OnClickListener() {
@@ -183,6 +198,7 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
             }
         });
     }
+
     //丫丫的代码
     // handle
     Handler handler2 = new Handler() {
@@ -190,6 +206,7 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
             switch (msg.what) {
                 case 1:
                     dismissProgressbar();
+                    //得到xml字符串
                     String str_xml = msg.obj.toString();
                     //SAXReader sax = new SAXReader();
                     try {
@@ -197,33 +214,42 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
                         Element root = document.getRootElement();
                         List nodes = root.elements("song_lry_response_elt");
                         String lrc_Content = "";
+                        //有两个值，第一个为歌名，第二个为歌词
                         for (Iterator it = nodes.iterator(); it.hasNext(); ) {
                             Element elm = (Element) it.next();
                             lrc_Content = elm.getText();
                         }
                         //对返回的string进行处理，截取[后的内容，一行行填充进arrayList
-                        //songName = lrc_Content;
                         str_Lyrics = lrc_Content.split("\\[");
-                        arrayLength = str_Lyrics.length;
                         for (int i = 0; i < str_Lyrics.length; i++) {
-                            if(str_Lyrics[i].length() != 0) {
-                                //ti:XXX]从3开始截取，00:14.55]从9开始截取
-                                if(str_Lyrics[i].length()>9) {
-                                    str_Lyrics[i] = str_Lyrics[i].substring(9);
-                                }
+                            //00:14.55]从9开始截取
+                            if(str_Lyrics[i].length()>9) {
+                                str_Lyrics[i] = str_Lyrics[i].substring(9);
+                            }else{
+                                str_Lyrics[i] = null;
                             }
                         }
-                        //choosen_songInfo = songName;
+                        //用新数组去掉null
+                        List<String> tmp = new ArrayList<String>();
+                        for(String str:str_Lyrics){
+                            if(str!=null && str.length()!=0){
+                                tmp.add(str);
+                            }
+                        }
+                        str_Lyrics = tmp.toArray(new String[0]);
+                        //choosen_songInfo = songName + "|" +singer;
                         //设置页面标题为歌名，副标题为歌手
-                        //DisplayLyricsActivity.this.setTitle(songName);
+                        //toolbar.setTitle(songName);
+                        //toolbar.setSubtitle(singer);
+
                         //填充listView
-                        for (int k = 0; k < str_Lyrics.length; k++) {
-                            dataList.add(new ItemBean(str_Lyrics[k], false, false));
+                        for (int i = 0; i < str_Lyrics.length; i++) {
+                            dataList.add(new ItemBean(str_Lyrics[i], false, false));
                         }
                         adapter = new Adapter(dataList, DisplayLyricsActivity.this);
                         listView.setAdapter(adapter);
                         adapter.setOnShowItemClickListener(DisplayLyricsActivity.this);
-                        //设置长按监听器
+                        //设置长按监听器，缺一个如果textview为空不显示checkbox
                         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                             @Override
                             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -327,5 +353,4 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
             progressBar = null;
         }
     }
-
 }

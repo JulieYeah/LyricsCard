@@ -3,6 +3,7 @@ package tracy_pc.createlyricscard;
 import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -86,7 +88,24 @@ public class CustomizeCardActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                new AlertDialog.Builder(CustomizeCardActivity.this).setTitle("Discard all changes ？")
+                        .setIcon(android.R.drawable.ic_dialog_info)
+                        .setPositiveButton("Discard", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // 点击“Discard”返回歌词页
+                                CustomizeCardActivity.this.finish();
+
+                            }
+                        })
+                        .setNegativeButton("Edit", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // 点击“Edit”后的操作,这里不设置没有任何操作,继续编辑
+                            }
+                        }).show();
             }
         });
 
@@ -149,15 +168,15 @@ public class CustomizeCardActivity extends AppCompatActivity {
                 return true;
             }
         });
-        //okay按钮点击时间
+        //okay按钮点击事件
         btn_Okay.getBackground().setAlpha(0);
         btn_Okay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 btn_Okay.setVisibility(View.INVISIBLE);
                 btn_Group.setVisibility(View.VISIBLE);
-                bottomImages.setVisibility(View.INVISIBLE);
-                bottomFonts.setVisibility(View.INVISIBLE);
+                bottomImages.setVisibility(View.GONE);
+                bottomFonts.setVisibility(View.GONE);
             }
         });
         //images按钮点击事件
@@ -413,5 +432,3 @@ public class CustomizeCardActivity extends AppCompatActivity {
         return bitmap;
     }
 }
-
-//test

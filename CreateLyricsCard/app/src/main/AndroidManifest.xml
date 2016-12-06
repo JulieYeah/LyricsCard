@@ -30,7 +30,11 @@
             android:label="@string/title_activity_customize_card"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".LyricsSearchActivity" />
-        <activity android:name=".HistoryImageActivity"></activity>
+        <activity android:name=".HistoryImageActivity" />
+        <activity
+            android:name=".CustomizeTwoActivity"
+            android:label="@string/title_activity_customize_two"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
