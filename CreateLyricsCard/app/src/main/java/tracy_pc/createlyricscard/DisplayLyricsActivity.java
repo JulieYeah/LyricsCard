@@ -65,7 +65,7 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_lyrics);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
 
         listView = (ListView) findViewById(R.id.listView);
         dataList = new ArrayList<ItemBean>();
@@ -77,7 +77,9 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
         //get the song name data from the onItemClick function from Lyric_SearchActivity
         Intent intent = getIntent();
         songid = intent.getStringExtra("songid");
-
+        songName=intent.getStringExtra("songs");
+        toolbar.setTitle(songName);
+        setSupportActionBar(toolbar);
         //New thread to handle the internet connection action
         new Thread(new Runnable() {
             @Override

@@ -35,25 +35,18 @@ public class LyricsSearchActivity extends AppCompatActivity {
     private String get_id_url = "";
     EditText inputSearch;
     ListView lyric_list;
-    Button btn_searchLyric;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lyrics_search);
         //initialize
-        btn_searchLyric = (Button) findViewById(R.id.btn_searchLyric);
+
         inputSearch = (EditText) findViewById(R.id.search_input);
         lyric_list = (ListView) findViewById(R.id.search_list);
+        lyric_list.setVisibility(View.INVISIBLE);
         final ImageView deletInput = (ImageView) findViewById(R.id.delete_input);
-        btn_searchLyric.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getBaseContext(), DisplayLyricsActivity.class);
-                intent.putExtra("search_by_name", inputSearch.getText());
-                startActivity(intent);
-            }
-        });
+        deletInput.setVisibility(View.INVISIBLE);
 
         //onclicklistener to choose the song
         lyric_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -89,22 +82,20 @@ public class LyricsSearchActivity extends AppCompatActivity {
                 //after every change of the input,send the request to get available lyrics
                 if (s.length() == 0) {
                     deletInput.setVisibility(View.GONE);
-                    lyric_list.setVisibility(View.INVISIBLE);
-                } else if (s.length() > 2) {//only search for result after entering two character
+                } else {//only search for result after entering two character
                     get_id_url = get_original_url + s;
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
                             try {
                                 URL new_url = new URL(get_id_url);
-                                urlConnection(new_url);
+                                 urlConnection(new_url);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
                     }).start();
                     deletInput.setVisibility(View.VISIBLE);
-                    lyric_list.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -112,7 +103,6 @@ public class LyricsSearchActivity extends AppCompatActivity {
     //connect to the internet and send the search value to handler
     private void urlConnection(URL url) {
         try {
-            lyric_list.setVisibility(View.VISIBLE);
             HttpURLConnection httpconn = (HttpURLConnection) url.openConnection();
             if (httpconn.getResponseCode() == HttpURLConnection.HTTP_OK) {
 
