@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LyricsSearchActivity extends AppCompatActivity {
+    //the api used:
     private String get_original_url = "http://tingapi.ting.baidu.com/v1/restserver/ting?format=xml&calback=&from=webapp_music&method=baidu.ting.search.catalogSug&query=";
     private String get_id_url = "";
     EditText inputSearch;
@@ -40,7 +41,7 @@ public class LyricsSearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lyrics_search);
-
+        //initialize
         btn_searchLyric = (Button) findViewById(R.id.btn_searchLyric);
         inputSearch = (EditText) findViewById(R.id.search_input);
         lyric_list = (ListView) findViewById(R.id.search_list);
@@ -78,20 +79,18 @@ public class LyricsSearchActivity extends AppCompatActivity {
         inputSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                //after every change of the input,send the request to get available lyrics
                 if (s.length() == 0) {
                     deletInput.setVisibility(View.GONE);
                     lyric_list.setVisibility(View.INVISIBLE);
-                } else if (s.length() > 2) {
+                } else if (s.length() > 2) {//only search for result after entering two character
                     get_id_url = get_original_url + s;
                     new Thread(new Runnable() {
                         @Override
@@ -110,7 +109,7 @@ public class LyricsSearchActivity extends AppCompatActivity {
             }
         });
     }
-
+    //connect to the internet and send the search value to handler
     private void urlConnection(URL url) {
         try {
             lyric_list.setVisibility(View.VISIBLE);
@@ -151,9 +150,9 @@ public class LyricsSearchActivity extends AppCompatActivity {
             Message msg = new Message();
             msg.what = -1;
             handler.sendMessage(msg);
-            Looper.prepare();
+           /* Looper.prepare();
             Toast.makeText(getApplicationContext(), "Fail to Connect", Toast.LENGTH_SHORT).show();
-            Looper.loop();
+            Looper.loop();*/
             e.printStackTrace();
         }
     }
@@ -162,13 +161,13 @@ public class LyricsSearchActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             ImageView not_found = (ImageView)findViewById(R.id.not_found);
             switch (msg.what) {
-                case 0:
+                case 0://set the dataset for the adapter for the listview
                     lyric_list.setVisibility(View.VISIBLE);
                     not_found.setVisibility(View.GONE);
                     SimpleAdapter adapter = new SimpleAdapter(getBaseContext(), (ArrayList<Map<String, Object>>) msg.obj, R.layout.lyric_list, new String[]{"songid", "Songs"}, new int[]{R.id.songid, R.id.songs});
                     lyric_list.setAdapter(adapter);
                     break;
-                case -1:
+                case -1://do not get the relevant lyrics
                     lyric_list.setVisibility(View.GONE);
                     not_found.setVisibility(View.VISIBLE);
             }

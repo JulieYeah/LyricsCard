@@ -78,6 +78,7 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
         Intent intent = getIntent();
         songid = intent.getStringExtra("songid");
 
+        //New thread to handle the internet connection action
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -89,7 +90,6 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
                 }
             }
         }).start();
-
 
     }
 
@@ -188,7 +188,7 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
     Handler handler2 = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case 1:
+                case 1://sucessful get the lyric content
                     dismissProgressbar();
                     String str_xml = msg.obj.toString();
                     //SAXReader sax = new SAXReader();
@@ -310,7 +310,7 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
             e.printStackTrace();
         }
     }
-
+    //while connecting the internet and dispaly the lyric ,indicate the downloading progress
     private void showProgressBar() {
         progressBar = new ProgressBar(this, null, android.R.attr.progressBarStyle);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -319,7 +319,7 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
         viewGroup = (ViewGroup) findViewById(R.id.parent_view);
         viewGroup.addView(progressBar, params);
     }
-
+    //stop the progressing indicator
     private void dismissProgressbar() {
         if (progressBar != null) {
             progressBar.setVisibility(View.GONE);
