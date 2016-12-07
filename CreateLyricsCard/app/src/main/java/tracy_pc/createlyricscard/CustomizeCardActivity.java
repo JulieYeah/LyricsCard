@@ -147,6 +147,9 @@ public class CustomizeCardActivity extends AppCompatActivity {
         int screenWidth = wm.getDefaultDisplay().getWidth();
         imageView.setLayoutParams(new RelativeLayout.LayoutParams(screenWidth,screenWidth));
 
+        //设置textView最大高度为图片长度
+        textView.setMaxHeight(screenWidth);
+
         imageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override
