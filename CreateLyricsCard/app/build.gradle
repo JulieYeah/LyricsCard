@@ -26,4 +26,6 @@ dependencies {
     compile 'com.android.support:design:24.2.1'
     compile 'com.getbase:floatingactionbutton:1.10.1'
     compile files('libs/dom4j-1.6.1.jar')
+
+    compile 'com.azeesoft.lib.colorpicker:colorpicker:1.0.8@aar'
 }

@@ -3,20 +3,17 @@ package tracy_pc.createlyricscard;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -89,7 +86,7 @@ public class LyricsSearchActivity extends AppCompatActivity {
                         public void run() {
                             try {
                                 URL new_url = new URL(get_id_url);
-                                 urlConnection(new_url);
+                                urlConnection(new_url);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

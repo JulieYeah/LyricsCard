@@ -1,26 +1,24 @@
 package tracy_pc.createlyricscard;
 
 import android.annotation.TargetApi;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
@@ -34,13 +32,15 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.azeesoft.lib.colorpicker.ColorPickerDialog;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class CustomizeTwoActivity extends AppCompatActivity {
+public class CustomizeThreeActivity extends AppCompatActivity {
     private ImageView imageView;
     private TextView textView;
     private TextView textView_Info;
@@ -58,11 +58,6 @@ public class CustomizeTwoActivity extends AppCompatActivity {
     private SeekBar seekBar;
     private LinearLayout img_Gallary;
     private int[] img_Group;
-    //相册和拍照
-    private static final int ALBUM_REQUEST_CODE = 1;
-    private static final int CROP_REQUEST_CODE = 2;
-    private static final String IMAGE_FILE_LOCATION = "file:///sdcard/temp.jpg";
-    Uri imageUri = Uri.parse(IMAGE_FILE_LOCATION);
     //文字
     private LinearLayout bottomFonts;
     private LinearLayout font_Gallary;
@@ -79,21 +74,21 @@ public class CustomizeTwoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_customize_two);
+        setContentView(R.layout.activity_customize_three);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.mipmap.ic_launcher);//设置导航栏图标
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(CustomizeTwoActivity.this).setTitle("Discard all changes ？")
+                new AlertDialog.Builder(CustomizeThreeActivity.this).setTitle("Discard all changes ？")
                         .setIcon(android.R.drawable.ic_dialog_info)
                         .setPositiveButton("Discard", new DialogInterface.OnClickListener() {
 
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 // 点击“Discard”返回歌词页
-                                CustomizeTwoActivity.this.finish();
+                                CustomizeThreeActivity.this.finish();
 
                             }
                         })
@@ -140,11 +135,10 @@ public class CustomizeTwoActivity extends AppCompatActivity {
         textView.setText(str_Value);
         textView_Info.setText(str_Info);
 
-        //获取当前窗口长度，设置为imageView的宽度,宽高比为4:3
+        //获取当前窗口长度，设置为imageView的宽度
         WindowManager wm = (WindowManager)this.getSystemService(Context.WINDOW_SERVICE);
         int screenWidth = wm.getDefaultDisplay().getWidth();
-        int screenHeight = (screenWidth * 75 )/ 100;
-        imageView.setLayoutParams(new RelativeLayout.LayoutParams(screenWidth,screenHeight));
+        imageView.setLayoutParams(new RelativeLayout.LayoutParams(screenWidth,screenWidth));
 
         imageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -156,6 +150,15 @@ public class CustomizeTwoActivity extends AppCompatActivity {
                 imagePositionY = imageView.getY();
                 imageWidth = imageView.getWidth();
                 imageHeight = imageView.getHeight();
+            }
+        });
+        final GestureDetector gestureDetector = new GestureDetector(this, new SimpleGestureListenerImpl());
+        //移动
+        textView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                gestureDetector.onTouchEvent(event);
+                return true;
             }
         });
         //okay按钮点击事件
@@ -193,10 +196,16 @@ public class CustomizeTwoActivity extends AppCompatActivity {
                             int src = (int)v.getTag();
                             switch(src){
                                 case R.drawable.bg_album:
-                                    //查看手机相册
-                                    Intent intent_album = new Intent(Intent.ACTION_PICK);
-                                    intent_album.setType("image/*");
-                                    startActivityForResult(intent_album,ALBUM_REQUEST_CODE);
+                                    //选择颜色
+                                    Log.i("tags","choose color");
+                                    ColorPickerDialog colorPickerDialog= ColorPickerDialog.createColorPickerDialog(CustomizeThreeActivity.this);
+                                    colorPickerDialog.setOnColorPickedListener(new ColorPickerDialog.OnColorPickedListener() {
+                                        @Override
+                                        public void onColorPicked(int color, String hexVal) {
+                                            imageView.setBackgroundColor(color);
+                                        }
+                                    });
+                                    colorPickerDialog.show();
                                     break;
                                 default:
                                     imageView.setImageResource(src);
@@ -332,52 +341,42 @@ public class CustomizeTwoActivity extends AppCompatActivity {
         fileName = formatter.format(curDate);
         return fileName;
     }
-    //相机和相册的回调函数
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        ContentResolver resolver = getContentResolver();
-        switch(requestCode){
-            case ALBUM_REQUEST_CODE:
-                if(data == null){
-                    return;
-                }
-                cropPhoto(data.getData());
-                break;
-            case CROP_REQUEST_CODE:
-                if(imageUri != null){
-                    Bitmap bitmap = decodeUriAsBitmap(imageUri);//decode bitmap
-                    imageView.setImageBitmap(bitmap);
-                }
-                break;
-            default:
-                break;
+
+    //移动
+    private int count = 0;
+    //textView的x方向和y方向移动量
+    private float mDx, mDy;
+    private class SimpleGestureListenerImpl extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            //向右移动时，distanceX为负；向左移动时，distanceX为正
+            //向下移动时，distanceY为负；向上移动时，distanceY为正
+            count++;
+            mDx -= distanceX;
+            mDy -= distanceY;
+
+            //边界检查
+            mDx = calPosition(imagePositionX - textView.getX(), imagePositionX + imageWidth - (textView.getX() + textView.getWidth()), mDx);
+            mDy = calPosition(imagePositionY - textView.getY(), imagePositionY + imageHeight - (textView.getY() + textView.getHeight()), mDy);
+
+            //控制刷新频率
+            if (count % 5 == 0) {
+                textView.setX(textView.getX() + mDx);
+                textView.setY(textView.getY() + mDy);
+            }
+            return true;
         }
     }
-    //裁剪图片
-    private void cropPhoto(Uri uri) {
-        Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setDataAndType(uri,"image/*");
-        intent.putExtra("crop", "true");
-        intent.putExtra("aspectX", 4);
-        intent.putExtra("aspectY", 3);
-        intent.putExtra("outputX", 400);
-        intent.putExtra("outputY", 300);
-
-        intent.putExtra("return-data", false);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-        startActivityForResult(intent, CROP_REQUEST_CODE);
-    }
-    private Bitmap decodeUriAsBitmap(Uri uri){
-        Bitmap bitmap = null;
-        try {
-            bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return null;
+    //计算正确的显示位置（不能超出边界）
+    private float calPosition(float min, float max, float current) {
+        if (current < min) {
+            return min;
         }
-        return bitmap;
+        if (current > max) {
+            return max;
+        }
+        return current;
     }
-
     //以图片形式获取View显示的内容
     public static Bitmap loadBitmapFromView(View view) {
         Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
@@ -389,14 +388,14 @@ public class CustomizeTwoActivity extends AppCompatActivity {
     //重写返回键
     @Override
     public void onBackPressed() {
-        new AlertDialog.Builder(CustomizeTwoActivity.this).setTitle("Discard all changes ？")
+        new AlertDialog.Builder(CustomizeThreeActivity.this).setTitle("Discard all changes ？")
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .setPositiveButton("Discard", new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // 点击“Discard”返回歌词页
-                        CustomizeTwoActivity.this.finish();
+                        CustomizeThreeActivity.this.finish();
 
                     }
                 })

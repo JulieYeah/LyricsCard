@@ -51,6 +51,8 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
 
     private String[] str_Lyrics;
     private ArrayAdapter<String> lyrics_adapter;
+
+    private String songInfo;
     private String songName;
     private String singer;
 
@@ -63,13 +65,23 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_lyrics);
-<<<<<<< HEAD
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-=======
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        //get the song name data from the onItemClick function from Lyric_SearchActivity
+        Intent intent = getIntent();
+        songid = intent.getStringExtra("songid");
+        songInfo = intent.getStringExtra("songs");
+        //截取歌名和歌手，歌名是0，歌手是2
+        String[] songInfoSplit = songInfo.split(" ");
+        if(songInfoSplit.length >= 2) {
+            songName = songInfoSplit[0];
+            singer = songInfoSplit[2];
+            choosen_songInfo = songName + " ♪ " +singer;
+
+            toolbar.setTitle(songName);
+            toolbar.setSubtitle(singer);
+        }
         setSupportActionBar(toolbar);
->>>>>>> 7d382c13a8f649c7c09f214ffa1cbfdff2f0fd03
 
         listView = (ListView) findViewById(R.id.listView);
         dataList = new ArrayList<ItemBean>();
@@ -78,13 +90,6 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
         //下方菜单
         bottom_Menu = (LinearLayout)findViewById(R.id.bottom_menu);
 
-        //get the song name data from the onItemClick function from Lyric_SearchActivity
-        Intent intent = getIntent();
-        songid = intent.getStringExtra("songid");
-        songName=intent.getStringExtra("songs");
-        toolbar.setTitle(songName);
-        setSupportActionBar(toolbar);
-        //New thread to handle the internet connection action
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -96,10 +101,6 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
                 }
             }
         }).start();
-<<<<<<< HEAD
-
-=======
->>>>>>> 7d382c13a8f649c7c09f214ffa1cbfdff2f0fd03
     }
 
     @Override
@@ -136,6 +137,7 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
         bottom_Menu.setVisibility(View.VISIBLE);
         // 返回和创建卡片按钮初始化及点击监听
         TextView textView_Back = (TextView) findViewById(R.id.operate_back);
+        //style 1最多4句，2不限，3最多两句
         TextView textView_Style1 = (TextView) findViewById(R.id.operate_style1);
         TextView textView_Style2 = (TextView) findViewById(R.id.operate_style2);
         TextView textView_Style3 = (TextView) findViewById(R.id.operate_style3);
@@ -207,6 +209,24 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
             @Override
             public void onClick(View v) {
                 Log.i("tag","style 3");
+                choosen_Lyrics = "";
+                countRow = selectList.size();
+                if(countRow == 0){
+                    Toast.makeText(getBaseContext(),"Please select the lyrics !", Toast.LENGTH_SHORT).show();
+                }
+                else if(countRow > 2){
+                    Toast.makeText(getBaseContext(),"Rows must be less than 3 !", Toast.LENGTH_SHORT).show();
+                }else{
+                    for(int i = 0;i < countRow;i++){
+                        String s = selectList.get(i).getMsg() + "\n";
+                        choosen_Lyrics += s;
+                    }
+                    Intent intent = new Intent(getBaseContext(),CustomizeThreeActivity.class);
+                    //传入选中的歌词
+                    intent.putExtra("extraLyrics",choosen_Lyrics);
+                    intent.putExtra("extraInfo",choosen_songInfo);
+                    startActivity(intent);
+                }
             }
         });
     }
@@ -216,7 +236,7 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
     Handler handler2 = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case 1://sucessful get the lyric content
+                case 1:
                     dismissProgressbar();
                     //得到xml字符串
                     String str_xml = msg.obj.toString();
@@ -249,10 +269,6 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
                             }
                         }
                         str_Lyrics = tmp.toArray(new String[0]);
-                        //choosen_songInfo = songName + "|" +singer;
-                        //设置页面标题为歌名，副标题为歌手
-                        //toolbar.setTitle(songName);
-                        //toolbar.setSubtitle(singer);
 
                         //填充listView
                         for (int i = 0; i < str_Lyrics.length; i++) {
@@ -348,7 +364,7 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
             e.printStackTrace();
         }
     }
-    //while connecting the internet and dispaly the lyric ,indicate the downloading progress
+
     private void showProgressBar() {
         progressBar = new ProgressBar(this, null, android.R.attr.progressBarStyle);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -357,7 +373,7 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
         viewGroup = (ViewGroup) findViewById(R.id.parent_view);
         viewGroup.addView(progressBar, params);
     }
-    //stop the progressing indicator
+
     private void dismissProgressbar() {
         if (progressBar != null) {
             progressBar.setVisibility(View.GONE);

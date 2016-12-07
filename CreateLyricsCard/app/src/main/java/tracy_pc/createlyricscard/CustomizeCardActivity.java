@@ -74,7 +74,7 @@ public class CustomizeCardActivity extends AppCompatActivity {
     private Button btn_AlignLeft;
     private Button btn_AlignMiddle;
     private Button btn_AlignRight;
-    int font_size = 32;
+    int font_size = 28;
 
     private Button btn_Okay;
 
@@ -277,8 +277,8 @@ public class CustomizeCardActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //字体变小
                 font_size -=2;
-                if(font_size<=20){
-                    font_size = 20;
+                if(font_size<=10){
+                    font_size = 10;
                 }
                 textView.setTextSize(font_size);
             }
@@ -430,5 +430,28 @@ public class CustomizeCardActivity extends AppCompatActivity {
         Canvas canvas = new Canvas(bitmap);
         view.draw(canvas);
         return bitmap;
+    }
+
+    //重写返回键
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(CustomizeCardActivity.this).setTitle("Discard all changes ？")
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setPositiveButton("Discard", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 点击“Discard”返回歌词页
+                        CustomizeCardActivity.this.finish();
+
+                    }
+                })
+                .setNegativeButton("Edit", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 点击“Edit”后的操作,这里不设置没有任何操作,继续编辑
+                    }
+                }).show();
     }
 }
