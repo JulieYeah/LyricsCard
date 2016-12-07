@@ -71,11 +71,11 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
         Intent intent = getIntent();
         songid = intent.getStringExtra("songid");
         songInfo = intent.getStringExtra("songs");
-        //截取歌名和歌手，歌名是0，歌手是2
-        String[] songInfoSplit = songInfo.split(" ");
-        if(songInfoSplit.length >= 2) {
+        //截取歌名和歌手，歌名-0，歌手-1
+        String[] songInfoSplit = songInfo.split(" --- ");
+        if(songInfoSplit.length >= 1) {
             songName = songInfoSplit[0];
-            singer = songInfoSplit[2];
+            singer = songInfoSplit[1];
             choosen_songInfo = songName + " ♪ " +singer;
 
             toolbar.setTitle(songName);
