@@ -2,6 +2,7 @@ package tracy_pc.createlyricscard;
 
 import android.annotation.TargetApi;
 import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -344,17 +345,15 @@ public class CustomizeCardActivity extends AppCompatActivity {
         });
     }
 
-    //after save the file choose to share,create a new dialog style
 
+    //after save the file choose to share,create a new dialog style
     private void showShareDialog() {
-       /* CustomDialog dialog ;
-        dialog=new CustomDialog(CustomizeCardActivity.this,R.style.customDialog,R.layout.share_dialog);
-        dialog.setTitle("Sharing to");*/
+
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
         final View layout = inflater.inflate(R.layout.share_dialog,
                 (ViewGroup) findViewById(R.id.sharing_to));
         AlertDialog.Builder builder;
-        final AlertDialog alertDialog;
+        final Dialog alertDialog;
         builder = new AlertDialog.Builder(this);
         builder.setView(layout);
         builder.setTitle("Sharing to");
@@ -362,12 +361,18 @@ public class CustomizeCardActivity extends AppCompatActivity {
         alertDialog.show();
         Button cancle_share;
         ImageView facebook_share = (ImageView)layout.findViewById(R.id.facebook);
+        ImageView instagram = (ImageView)layout.findViewById(R.id.instgram);
         cancle_share = (Button)layout.findViewById(R.id.not_now_share);
+
         View.OnClickListener sharingListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()){
                     case R.id.facebook:
+                        shareImage(loadBitmapFromView(containerView));
+                        break;
+                    case R.id.instgram:
+                        shareImageToWechat();
                         break;
                     case R.id.not_now_share:
                         alertDialog.dismiss();
@@ -375,6 +380,26 @@ public class CustomizeCardActivity extends AppCompatActivity {
                 }
             }
         };
+        cancle_share.setOnClickListener(sharingListener);
+        facebook_share.setOnClickListener(sharingListener);
+    }
+//should use the url of the file
+    private void shareImageToWechat() {
+        Intent intent = new Intent();
+        ComponentName comp = new ComponentName("com.tencent.mm","com.tencent.mm.ui.tools.ShareToTimeLineUI");
+        intent.setComponent(comp);
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("image/*");
+        //intent.putExtra(Intent.EXTRA_STREAM,Uri.fromFile(file));//there is no file path yet
+        startActivity(intent);
+
+    }
+//不知道这个会出现什么。。。应该是调用系统自带的软件进行分享
+    private void shareImage(Bitmap shareImage) {
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("image/*");
+        share.putExtra(Intent.EXTRA_STREAM,shareImage);
+        startActivity(Intent.createChooser(share,"Share Image!"));
     }
 
 

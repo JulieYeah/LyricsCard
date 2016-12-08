@@ -31,10 +31,19 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".LyricsSearchActivity" />
         <activity android:name=".HistoryImageActivity" />
+
         <activity
             android:name=".CustomizeTwoActivity"
             android:label="@string/title_activity_customize_two"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".CustomizeThreeActivity"
+            android:label="Customize"
+            android:theme="@style/AppTheme.NoActionBar"
+            >
+        </activity>
     </application>
+
+
 
 </manifest>
