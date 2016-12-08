@@ -143,8 +143,7 @@ public class CustomizeTwoActivity extends AppCompatActivity {
         //获取当前窗口长度，设置为imageView的宽度,宽高比为4:3
         WindowManager wm = (WindowManager)this.getSystemService(Context.WINDOW_SERVICE);
         int screenWidth = wm.getDefaultDisplay().getWidth();
-        int screenHeight = (screenWidth * 75 )/ 100;
-        imageView.setLayoutParams(new RelativeLayout.LayoutParams(screenWidth,screenHeight));
+        imageView.setLayoutParams(new RelativeLayout.LayoutParams(screenWidth,screenWidth));
 
         imageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -312,10 +311,16 @@ public class CustomizeTwoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Bitmap lyricsCard = loadBitmapFromView(containerView);
                 String fileName = getFileName();
-                String filePath = Environment.getExternalStorageDirectory() + File.separator + fileName + ".jpg";
+                //建立文件夹
+                String appHome = Environment.getExternalStorageDirectory().getAbsolutePath()+"/melyrics";
+                File file = new File(appHome);
+                if(!file.exists()){
+                    file.mkdir();
+                }
+                String filePath = appHome + File.separator + fileName + ".jpg";
                 try {
                     lyricsCard.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(filePath));
-                    Toast.makeText(getBaseContext(), "Saved at : sdcard/" + fileName + ".jpg",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), "Saved at : sdcard/melyrics/" + fileName + ".jpg",Toast.LENGTH_LONG).show();
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                     Log.i("tag","error");
@@ -357,10 +362,10 @@ public class CustomizeTwoActivity extends AppCompatActivity {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri,"image/*");
         intent.putExtra("crop", "true");
-        intent.putExtra("aspectX", 4);
-        intent.putExtra("aspectY", 3);
-        intent.putExtra("outputX", 400);
-        intent.putExtra("outputY", 300);
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("outputX", 500);
+        intent.putExtra("outputY", 500);
 
         intent.putExtra("return-data", false);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
