@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">CreateLyricsCard</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">Melyrics</string>
+    <string name="action_about_us">About us</string>
     <string name="action_confirm">Confirm</string>
     <string name="fixed_lyrics">No Lyrics</string>
     <string name="title_activity_customize_card">Customize</string>
     <string name="title_activity_customize_two">Customize</string>
+    <string name="title_activity_customize_three">Customize</string>
 </resources>

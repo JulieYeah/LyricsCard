@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -65,7 +64,8 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_lyrics);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         //get the song name data from the onItemClick function from Lyric_SearchActivity
         Intent intent = getIntent();
@@ -118,7 +118,10 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_aboutUs) {
+            //弹出新界面介绍app和developer
+            Intent intent = new Intent(getBaseContext(),AboutUsActivity.class);
+            startActivity(intent);
             return true;
         }
 
@@ -162,7 +165,6 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
             @Override
             public void onClick(View v) {
                 //musixmatch音乐风格创建歌词卡片
-                Log.i("tag","style 1");
                 choosen_Lyrics = "";
                 countRow = selectList.size();
                 if(countRow == 0){
@@ -187,7 +189,6 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
             @Override
             public void onClick(View v) {
                 //网易云音乐风格创建卡片
-                Log.i("tag","style 2");
                 choosen_Lyrics = "";
                 countRow = selectList.size();
                 if(countRow == 0){
@@ -208,7 +209,6 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
         textView_Style3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("tag","style 3");
                 choosen_Lyrics = "";
                 countRow = selectList.size();
                 if(countRow == 0){
@@ -380,5 +380,21 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
             viewGroup.removeView(progressBar);
             progressBar = null;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isShow) {
+            selectList.clear();
+            for (ItemBean bean : dataList) {
+                bean.setChecked(false);
+                bean.setShow(false);
+            }
+            adapter.notifyDataSetChanged();
+            isShow = false;
+            listView.setLongClickable(true);
+            bottom_Menu.setVisibility(View.GONE);
+        }
+        DisplayLyricsActivity.this.finish();
     }
 }

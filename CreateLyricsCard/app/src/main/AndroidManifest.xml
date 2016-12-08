@@ -27,7 +27,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".CustomizeCardActivity"
-            android:label="@string/title_activity_customize_card"
+            android:label="Customize"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".LyricsSearchActivity" />
         <activity android:name=".HistoryImageActivity" />
@@ -42,6 +42,12 @@
             android:theme="@style/AppTheme.NoActionBar"
             >
         </activity>
+
+            android:label="Customize"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity android:name=".AboutUsActivity"></activity>
+
     </application>
 
 

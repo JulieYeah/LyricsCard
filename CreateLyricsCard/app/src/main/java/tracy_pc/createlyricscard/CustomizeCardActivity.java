@@ -45,7 +45,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import tracy_pc.createlyricscard.CustomDialog;
 
 public class CustomizeCardActivity extends AppCompatActivity {
     private ImageView imageView;
@@ -330,13 +329,16 @@ public class CustomizeCardActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Bitmap lyricsCard = loadBitmapFromView(containerView);
                 String fileName = getFileName();
-                String filePath = Environment.getExternalStorageDirectory() + File.separator + fileName + ".jpg";
+                //建立文件夹
+                String appHome = Environment.getExternalStorageDirectory().getAbsolutePath()+"/melyrics";
+                File file = new File(appHome);
+                if(!file.exists()){
+                    file.mkdir();
+                }
+                String filePath = appHome + File.separator + fileName + ".jpg";
                 try {
-                    //to show the dialog window
-                    showShareDialog();
                     lyricsCard.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(filePath));
-                    Toast.makeText(getBaseContext(), "Saved at : sdcard/" + fileName + ".jpg",Toast.LENGTH_LONG).show();
-
+                    Toast.makeText(getBaseContext(), "Saved at : sdcard/melyrics/" + fileName + ".jpg",Toast.LENGTH_LONG).show();
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                     Log.i("tag","error");
@@ -344,7 +346,6 @@ public class CustomizeCardActivity extends AppCompatActivity {
             }
         });
     }
-
 
     //after save the file choose to share,create a new dialog style
     private void showShareDialog() {
@@ -523,5 +524,4 @@ public class CustomizeCardActivity extends AppCompatActivity {
                     }
                 }).show();
     }
-
 }
