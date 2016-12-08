@@ -329,6 +329,7 @@ public class CustomizeCardActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Bitmap lyricsCard = loadBitmapFromView(containerView);
                 String fileName = getFileName();
+                showShareDialog();
                 //建立文件夹
                 String appHome = Environment.getExternalStorageDirectory().getAbsolutePath()+"/melyrics";
                 File file = new File(appHome);
