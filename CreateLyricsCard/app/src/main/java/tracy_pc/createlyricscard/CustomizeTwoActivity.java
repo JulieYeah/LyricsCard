@@ -1,6 +1,7 @@
 package tracy_pc.createlyricscard;
 
 import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,7 +22,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -318,9 +321,11 @@ public class CustomizeTwoActivity extends AppCompatActivity {
                     file.mkdir();
                 }
                 String filePath = appHome + File.separator + fileName + ".jpg";
+                Uri uri = Uri.parse(filePath);
                 try {
                     lyricsCard.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(filePath));
                     Toast.makeText(getBaseContext(), "Saved at : sdcard/melyrics/" + fileName + ".jpg",Toast.LENGTH_LONG).show();
+                    showShareDialog(uri);
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                     Log.i("tag","error");
@@ -412,5 +417,45 @@ public class CustomizeTwoActivity extends AppCompatActivity {
                         // 点击“Edit”后的操作,这里不设置没有任何操作,继续编辑
                     }
                 }).show();
+    }
+    //after save the file choose to share,create a new dialog style
+    private void showShareDialog(final Uri uri) {
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+        final View layout = inflater.inflate(R.layout.share_dialog,
+                (ViewGroup) findViewById(R.id.sharing_to));
+        AlertDialog.Builder builder;
+        final Dialog alertDialog;
+        builder = new AlertDialog.Builder(this);
+        builder.setView(layout);
+        builder.setTitle("Sharing");
+        alertDialog = builder.create();
+        Button cancle_share;
+        ImageView image_share = (ImageView)layout.findViewById(R.id.img_finished);
+        image_share.setImageBitmap(loadBitmapFromView(containerView));
+        cancle_share = (Button)layout.findViewById(R.id.not_now_share);
+        alertDialog.show();
+        View.OnClickListener sharingListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()){
+                    case R.id.img_finished:
+                        shareImage(uri);
+                        break;
+                    case R.id.not_now_share:
+                        alertDialog.dismiss();
+                        layout.setVisibility(View.GONE);
+                }
+            }
+        };
+        cancle_share.setOnClickListener(sharingListener);
+        image_share.setOnClickListener(sharingListener);
+    }
+
+    //调用系统自带的软件进行分享
+    private void shareImage(Uri uri) {
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("image/*");
+        share.putExtra(Intent.EXTRA_STREAM,uri);
+        startActivity(Intent.createChooser(share,"Share Image to"));
     }
 }
