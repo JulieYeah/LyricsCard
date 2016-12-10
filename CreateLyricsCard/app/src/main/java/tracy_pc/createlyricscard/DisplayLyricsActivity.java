@@ -171,12 +171,12 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
                         String s = selectList.get(i).getMsg() + "\n";
                         choosen_Lyrics += s;
                     }
+                    Intent intent = new Intent(getBaseContext(),CustomizeTwoActivity.class);
+                    //传入选中的歌词
+                    intent.putExtra("extraLyrics",choosen_Lyrics);
+                    intent.putExtra("extraInfo",choosen_songInfo);
+                    startActivity(intent);
                 }
-                Intent intent = new Intent(getBaseContext(),CustomizeTwoActivity.class);
-                //传入选中的歌词
-                intent.putExtra("extraLyrics",choosen_Lyrics);
-                intent.putExtra("extraInfo",choosen_songInfo);
-                startActivity(intent);
             }
         });
         img_Style3.setOnClickListener(new View.OnClickListener() {

@@ -439,7 +439,7 @@ public class CustomizeThreeActivity extends AppCompatActivity {
         final Dialog alertDialog;
         builder = new AlertDialog.Builder(this);
         builder.setView(layout);
-        builder.setTitle("Sharing");
+        builder.setTitle("Click the picture to share");
         alertDialog = builder.create();
         Button cancle_share;
         ImageView image_share = (ImageView)layout.findViewById(R.id.img_finished);

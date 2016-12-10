@@ -1,9 +1,19 @@
 <resources>
     <string name="app_name">Melyrics</string>
-    <string name="action_about_us">About us</string>
     <string name="action_confirm">Confirm</string>
     <string name="fixed_lyrics">No Lyrics</string>
     <string name="title_activity_customize_card">Customize</string>
     <string name="title_activity_customize_two">Customize</string>
     <string name="title_activity_customize_three">Customize</string>
+        <string name="about_us">
+        Me-lyric is an image-based lyric share app, combing the feature of the lyric sharing function from a Music Player and Image-editing function from an image share App.
+            \n\nDeveloped by Tracy and Julie,
+            \nas course project, as a start not an end.
+            \n\nAny suggestion is welcome.
+            \nEmail us : xinyunch@connect.hku.hk / yeyaya@connect.hku.hk
+            \n\nFor all music lovers, for all image lovers
+            \n\nHope all of u could make the best match of touching words and amazing images.
+            \n\n感謝永遠有歌　把心境道破
+            \n哪論動或靜　誰也有情　情緒有它撫摸
+    </string>
 </resources>

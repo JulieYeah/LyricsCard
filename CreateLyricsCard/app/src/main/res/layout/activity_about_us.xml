@@ -12,15 +12,27 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="This application is developed by Julie Ye and Tracy Chai..."
+        android:text="@string/about_us"
+        android:textSize="20sp"
         android:id="@+id/textView"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <Button
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="\n—— 林夕「 歌颂 」"
+        android:textSize="20sp"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentRight="true" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_alignParentBottom="true"
         android:text="Back"
         android:textColor="#ffffff"
         android:id="@+id/btn_back"
