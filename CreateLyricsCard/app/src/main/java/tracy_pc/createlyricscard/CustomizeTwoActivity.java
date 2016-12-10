@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Typeface;
@@ -52,10 +53,10 @@ public class CustomizeTwoActivity extends AppCompatActivity {
     //父组件的尺寸
     private float imageWidth, imageHeight, imagePositionX, imagePositionY;
     //底部按钮组
-    private LinearLayout btn_Group;
-    private Button btn_Images;
-    private Button btn_Fonts;
-    private Button btn_Save;
+    private RelativeLayout btn_Group;
+    private ImageButton btn_Images;
+    private ImageButton btn_Fonts;
+    private ImageButton btn_Save;
     //图片和进度条
     private LinearLayout bottomImages;
     private SeekBar seekBar;
@@ -119,10 +120,10 @@ public class CustomizeTwoActivity extends AppCompatActivity {
         textView_Info = (TextView) findViewById(R.id.textView_info);
         containerView = (RelativeLayout) findViewById(R.id.container);
         //按钮组
-        btn_Group = (LinearLayout) findViewById(R.id.btn_group);
-        btn_Images = (Button) findViewById(R.id.btn_images);
-        btn_Fonts = (Button) findViewById(R.id.btn_fonts);
-        btn_Save = (Button) findViewById(R.id.btn_save);
+        btn_Group = (RelativeLayout) findViewById(R.id.btn_group);
+        btn_Images = (ImageButton) findViewById(R.id.btn_images);
+        btn_Fonts = (ImageButton) findViewById(R.id.btn_fonts);
+        btn_Save = (ImageButton) findViewById(R.id.btn_save);
         //images
         bottomImages = (LinearLayout) findViewById(R.id.bottom_images);
         seekBar = (SeekBar) findViewById(R.id.seekBar);
@@ -180,11 +181,13 @@ public class CustomizeTwoActivity extends AppCompatActivity {
                 btn_Group.setVisibility(View.INVISIBLE);
                 bottomImages.setVisibility(View.VISIBLE);
 
-                img_Group = new int[]{R.drawable.bg_album,R.drawable.bg_1,R.drawable.bg_2,R.drawable.bg_3,R.drawable.bg_4,R.drawable.bg_5};
+                img_Group = new int[]{R.mipmap.bg_album,R.mipmap.bg_1,R.mipmap.bg_2,R.mipmap.bg_3,R.mipmap.bg_4,R.mipmap.bg_5,
+                        R.mipmap.bg_6,R.mipmap.bg_7,R.mipmap.bg_8,R.mipmap.bg_9,R.mipmap.bg_10};
                 for(int i = 0;i < img_Group.length;i++){
                     ImageButton img_bg= new ImageButton(getBaseContext());
-                    img_bg.setLayoutParams(new HorizontalScrollView.LayoutParams(400,400));
+                    img_bg.setLayoutParams(new HorizontalScrollView.LayoutParams(300,300));
                     img_bg.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                    img_bg.setBackgroundColor(Color.WHITE);
                     img_bg.setImageResource(img_Group[i]);
                     img_bg.setTag(img_Group[i]);
                     img_Gallary.addView(img_bg);
@@ -194,7 +197,7 @@ public class CustomizeTwoActivity extends AppCompatActivity {
                         public void onClick(View v) {
                             int src = (int)v.getTag();
                             switch(src){
-                                case R.drawable.bg_album:
+                                case R.mipmap.bg_album:
                                     //查看手机相册
                                     Intent intent_album = new Intent(Intent.ACTION_PICK);
                                     intent_album.setType("image/*");
@@ -237,10 +240,11 @@ public class CustomizeTwoActivity extends AppCompatActivity {
                 bottomFonts.setVisibility(View.VISIBLE);
 
 
-                font_Group = new int[]{R.drawable.font_1,R.drawable.font_2,R.drawable.font_1,R.drawable.font_2,R.drawable.font_1,R.drawable.font_2};
+                font_Group = new int[]{R.mipmap.font_0,R.mipmap.font_1,R.mipmap.font_2,R.mipmap.font_3,R.mipmap.font_4,R.mipmap.font_5,
+                        R.mipmap.font_6,R.mipmap.font_7,R.mipmap.font_8,R.mipmap.font_9,R.mipmap.font_10};
                 for(int i = 0;i < font_Group.length;i++){
                     ImageButton img_font= new ImageButton(getBaseContext());
-                    img_font.setLayoutParams(new HorizontalScrollView.LayoutParams(400,400));
+                    img_font.setLayoutParams(new HorizontalScrollView.LayoutParams(300,300));
                     img_font.setScaleType(ImageView.ScaleType.FIT_CENTER);
                     img_font.setImageResource(font_Group[i]);
                     img_font.setTag(i);
@@ -314,21 +318,27 @@ public class CustomizeTwoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Bitmap lyricsCard = loadBitmapFromView(containerView);
                 String fileName = getFileName();
-                //建立文件夹
-                String appHome = Environment.getExternalStorageDirectory().getAbsolutePath()+"/melyrics";
-                File file = new File(appHome);
-                if(!file.exists()){
-                    file.mkdir();
-                }
-                String filePath = appHome + File.separator + fileName + ".jpg";
-                Uri uri = Uri.parse(filePath);
-                try {
-                    lyricsCard.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(filePath));
-                    Toast.makeText(getBaseContext(), "Saved at : sdcard/melyrics/" + fileName + ".jpg",Toast.LENGTH_LONG).show();
-                    showShareDialog(uri);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                    Log.i("tag","error");
+                //判断SD卡是否可用
+                if (android.os.Environment.getExternalStorageState().equals(
+                        android.os.Environment.MEDIA_MOUNTED)) {
+                    //建立文件夹
+                    String appHome = Environment.getExternalStorageDirectory().getAbsolutePath()+"/melyrics";
+                    File file = new File(appHome);
+                    if(!file.exists()){
+                        file.mkdir();
+                    }
+                    String filePath = appHome + File.separator + fileName + ".jpg";
+                    Uri uri = Uri.parse(filePath);
+                    try {
+                        lyricsCard.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(filePath));
+                        Toast.makeText(getBaseContext(), "Saved at : sdcard/melyrics/" + fileName + ".jpg",Toast.LENGTH_LONG).show();
+                        showShareDialog(uri);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                        Log.i("tag","error");
+                    }
+                } else {
+                    Toast.makeText(getBaseContext(), "SD card is not usable !",Toast.LENGTH_LONG).show();
                 }
             }
         });

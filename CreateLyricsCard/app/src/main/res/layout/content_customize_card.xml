@@ -20,7 +20,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/bg_1" />
+            android:src="@mipmap/bg_1" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -196,10 +196,10 @@
                 android:id="@+id/align_right"
                 android:text="RIGHT"/>
         </RelativeLayout>
-        <!---点击按钮后可见并且加载不同的图片绑定不同的时间-->
+        <!---点击按钮后可见并且加载不同的图片绑定不同的事件-->
         <HorizontalScrollView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="150dp"
             android:layout_marginTop="16dp"
             android:scrollbars="none" >
             <LinearLayout

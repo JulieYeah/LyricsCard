@@ -23,10 +23,11 @@ public class StartActivity extends AppCompatActivity {
         img_Welcome = (ImageView) findViewById(R.id.img_welcome);
         WindowManager wm = (WindowManager)this.getSystemService(Context.WINDOW_SERVICE);
         int screenWidth = wm.getDefaultDisplay().getWidth();
-        img_Welcome.setLayoutParams(new RelativeLayout.LayoutParams(screenWidth,screenWidth));
+        int screenHeight = screenWidth * 75 / 100;
+        img_Welcome.setLayoutParams(new RelativeLayout.LayoutParams(screenWidth,screenHeight));
 
         Button btn_start = (Button)findViewById(R.id.btn_start);
-        Button btn_history = (Button)findViewById(R.id.btn_history);
+        Button btn_about_us = (Button)findViewById(R.id.btn_about_us);
 
         View.OnClickListener listener = new View.OnClickListener(){
             public void onClick(View view){
@@ -35,14 +36,14 @@ public class StartActivity extends AppCompatActivity {
                         Intent intent = new Intent(getBaseContext(),LyricsSearchActivity.class);
                         startActivity(intent);
                         break;
-                    case R.id.btn_history:
-                        Intent intent2 = new Intent(getBaseContext(),HistoryImageActivity.class);
+                    case R.id.btn_about_us:
+                        Intent intent2 = new Intent(getBaseContext(),AboutUsActivity.class);
                         startActivity(intent2);
                         break;
                 }
             }
         };
         btn_start.setOnClickListener(listener);
-        btn_history.setOnClickListener(listener);
+        btn_about_us.setOnClickListener(listener);
     }
 }

@@ -20,7 +20,7 @@
             android:layout_marginLeft="10sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Please input the song name..."
+            android:hint="Search songs or artists..."
             android:id="@+id/search_input"
             android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"
             android:maxLines="1" />

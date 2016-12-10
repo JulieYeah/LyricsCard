@@ -22,7 +22,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Back"
+        android:textColor="#ffffff"
         android:id="@+id/btn_back"
+        android:background="@drawable/melyrics_button"
         android:layout_centerInParent="true" />
 
 </RelativeLayout>
