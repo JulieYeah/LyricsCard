@@ -195,8 +195,8 @@ public class CustomizeCardActivity extends AppCompatActivity {
                 btn_Group.setVisibility(View.INVISIBLE);
                 bottomImages.setVisibility(View.VISIBLE);
 
-                img_Group = new int[]{R.drawable.bg_album,R.drawable.bg_1,R.drawable.bg_2,R.drawable.bg_3,R.drawable.bg_4,R.drawable.bg_5,
-                        R.drawable.bg_6,R.drawable.bg_7,R.drawable.bg_8,R.drawable.bg_9,R.drawable.bg_10};
+                img_Group = new int[]{R.mipmap.bg_album,R.mipmap.bg_1,R.mipmap.bg_2,R.mipmap.bg_3,R.mipmap.bg_4,R.mipmap.bg_5,
+                        R.mipmap.bg_6,R.mipmap.bg_7,R.mipmap.bg_8,R.mipmap.bg_9,R.mipmap.bg_10};
                 for(int i = 0;i < img_Group.length;i++){
                     ImageButton img_bg= new ImageButton(getBaseContext());
                     img_bg.setLayoutParams(new HorizontalScrollView.LayoutParams(300,300));
@@ -211,7 +211,7 @@ public class CustomizeCardActivity extends AppCompatActivity {
                         public void onClick(View v) {
                             int src = (int)v.getTag();
                             switch(src){
-                                case R.drawable.bg_album:
+                                case R.mipmap.bg_album:
                                     //查看手机相册
                                     Intent intent_album = new Intent(Intent.ACTION_PICK);
                                     intent_album.setType("image/*");
@@ -254,8 +254,8 @@ public class CustomizeCardActivity extends AppCompatActivity {
                 bottomFonts.setVisibility(View.VISIBLE);
 
 
-                font_Group = new int[]{R.drawable.font_0,R.drawable.font_1,R.drawable.font_2,R.drawable.font_3,R.drawable.font_4,R.drawable.font_5,
-                        R.drawable.font_6,R.drawable.font_7,R.drawable.font_8,R.drawable.font_9,R.drawable.font_10};
+                font_Group = new int[]{R.mipmap.font_0,R.mipmap.font_1,R.mipmap.font_2,R.mipmap.font_3,R.mipmap.font_4,R.mipmap.font_5,
+                        R.mipmap.font_6,R.mipmap.font_7,R.mipmap.font_8,R.mipmap.font_9,R.mipmap.font_10};
                 for(int i = 0;i < font_Group.length;i++){
                     ImageButton img_font= new ImageButton(getBaseContext());
                     img_font.setLayoutParams(new HorizontalScrollView.LayoutParams(300,300));
