@@ -10,7 +10,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/melyrics_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -22,6 +22,12 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".LyricsSearchActivity"
+            android:theme="@style/AppTheme"/>
+        <activity
+            android:name=".HistoryImageActivity"
+            android:theme="@style/AppTheme"/>
+        <activity
             android:name=".DisplayLyricsActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -29,27 +35,15 @@
             android:name=".CustomizeCardActivity"
             android:label="Customize"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".LyricsSearchActivity" />
-        <activity android:name=".HistoryImageActivity" />
-
         <activity
             android:name=".CustomizeTwoActivity"
-            android:label="@string/title_activity_customize_two"
-            android:theme="@style/AppTheme.NoActionBar"/>
-
-        <activity android:name=".CustomizeThreeActivity"
-            android:label="Customize"
-            android:theme="@style/AppTheme.NoActionBar"
-            >
-        </activity>
-
             android:label="Customize"
             android:theme="@style/AppTheme.NoActionBar" />
-
+        <activity
+            android:name=".CustomizeThreeActivity"
+            android:label="Customize"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".AboutUsActivity"></activity>
-
     </application>
-
-
 
 </manifest>

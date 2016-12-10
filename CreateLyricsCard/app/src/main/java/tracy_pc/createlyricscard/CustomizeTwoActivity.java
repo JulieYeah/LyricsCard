@@ -74,7 +74,7 @@ public class CustomizeTwoActivity extends AppCompatActivity {
     private Button btn_AlignRight;
     int font_size = 28;
 
-    private Button btn_Okay;
+    private ImageButton btn_Okay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +82,7 @@ public class CustomizeTwoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_customize_two);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.mipmap.ic_launcher);//设置导航栏图标
+        toolbar.setNavigationIcon(R.mipmap.left_arrow);//设置导航栏图标
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,7 +108,7 @@ public class CustomizeTwoActivity extends AppCompatActivity {
         });
 
         //自己设置的okay按钮
-        btn_Okay = (Button) findViewById(R.id.btn_okay);
+        btn_Okay = (ImageButton) findViewById(R.id.btn_okay);
 
         //绑定控件
         imageView = (ImageView) findViewById(R.id.imageView);

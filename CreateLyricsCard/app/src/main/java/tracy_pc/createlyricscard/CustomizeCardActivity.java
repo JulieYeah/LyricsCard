@@ -2,7 +2,6 @@ package tracy_pc.createlyricscard;
 
 import android.annotation.TargetApi;
 import android.app.Dialog;
-import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Typeface;
@@ -55,10 +55,10 @@ public class CustomizeCardActivity extends AppCompatActivity {
     //父组件的尺寸
     private float imageWidth, imageHeight, imagePositionX, imagePositionY;
     //底部按钮组
-    private LinearLayout btn_Group;
-    private Button btn_Images;
-    private Button btn_Fonts;
-    private Button btn_Save;
+    private RelativeLayout btn_Group;
+    private ImageButton btn_Images;
+    private ImageButton btn_Fonts;
+    private ImageButton btn_Save;
     //图片和进度条
     private LinearLayout bottomImages;
     private SeekBar seekBar;
@@ -80,7 +80,7 @@ public class CustomizeCardActivity extends AppCompatActivity {
     private Button btn_AlignRight;
     int font_size = 28;
 
-    private Button btn_Okay;
+    private ImageButton btn_Okay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +88,7 @@ public class CustomizeCardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_customize_card);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.mipmap.ic_launcher);//设置导航栏图标
+        toolbar.setNavigationIcon(R.mipmap.left_arrow);//设置导航栏图标
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,7 +114,7 @@ public class CustomizeCardActivity extends AppCompatActivity {
         });
 
         //自己设置的okay按钮
-        btn_Okay = (Button) findViewById(R.id.btn_okay);
+        btn_Okay = (ImageButton) findViewById(R.id.btn_okay);
 
         //绑定控件
         imageView = (ImageView) findViewById(R.id.imageView);
@@ -122,10 +122,10 @@ public class CustomizeCardActivity extends AppCompatActivity {
         textView_Info = (TextView) findViewById(R.id.textView_info);
         containerView = (RelativeLayout) findViewById(R.id.container);
         //按钮组
-        btn_Group = (LinearLayout) findViewById(R.id.btn_group);
-        btn_Images = (Button) findViewById(R.id.btn_images);
-        btn_Fonts = (Button) findViewById(R.id.btn_fonts);
-        btn_Save = (Button) findViewById(R.id.btn_save);
+        btn_Group = (RelativeLayout) findViewById(R.id.btn_group);
+        btn_Images = (ImageButton) findViewById(R.id.btn_images);
+        btn_Fonts = (ImageButton) findViewById(R.id.btn_fonts);
+        btn_Save = (ImageButton) findViewById(R.id.btn_save);
         //images
         bottomImages = (LinearLayout) findViewById(R.id.bottom_images);
         seekBar = (SeekBar) findViewById(R.id.seekBar);
@@ -195,11 +195,13 @@ public class CustomizeCardActivity extends AppCompatActivity {
                 btn_Group.setVisibility(View.INVISIBLE);
                 bottomImages.setVisibility(View.VISIBLE);
 
-                img_Group = new int[]{R.drawable.bg_album,R.drawable.bg_1,R.drawable.bg_2,R.drawable.bg_3,R.drawable.bg_4,R.drawable.bg_5};
+                img_Group = new int[]{R.drawable.bg_album,R.drawable.bg_1,R.drawable.bg_2,R.drawable.bg_3,R.drawable.bg_4,R.drawable.bg_5,
+                        R.drawable.bg_6,R.drawable.bg_7,R.drawable.bg_8,R.drawable.bg_9,R.drawable.bg_10};
                 for(int i = 0;i < img_Group.length;i++){
                     ImageButton img_bg= new ImageButton(getBaseContext());
-                    img_bg.setLayoutParams(new HorizontalScrollView.LayoutParams(400,400));
+                    img_bg.setLayoutParams(new HorizontalScrollView.LayoutParams(300,300));
                     img_bg.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                    img_bg.setBackgroundColor(Color.WHITE);
                     img_bg.setImageResource(img_Group[i]);
                     img_bg.setTag(img_Group[i]);
                     img_Gallary.addView(img_bg);
@@ -252,10 +254,11 @@ public class CustomizeCardActivity extends AppCompatActivity {
                 bottomFonts.setVisibility(View.VISIBLE);
 
 
-                font_Group = new int[]{R.drawable.font_1,R.drawable.font_2,R.drawable.font_1,R.drawable.font_2,R.drawable.font_1,R.drawable.font_2};
+                font_Group = new int[]{R.drawable.font_0,R.drawable.font_1,R.drawable.font_2,R.drawable.font_3,R.drawable.font_4,R.drawable.font_5,
+                        R.drawable.font_6,R.drawable.font_7,R.drawable.font_8,R.drawable.font_9,R.drawable.font_10};
                 for(int i = 0;i < font_Group.length;i++){
                     ImageButton img_font= new ImageButton(getBaseContext());
-                    img_font.setLayoutParams(new HorizontalScrollView.LayoutParams(400,400));
+                    img_font.setLayoutParams(new HorizontalScrollView.LayoutParams(300,300));
                     img_font.setScaleType(ImageView.ScaleType.FIT_CENTER);
                     img_font.setImageResource(font_Group[i]);
                     img_font.setTag(i);
@@ -329,81 +332,31 @@ public class CustomizeCardActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Bitmap lyricsCard = loadBitmapFromView(containerView);
                 String fileName = getFileName();
-                showShareDialog();
-                //建立文件夹
-                String appHome = Environment.getExternalStorageDirectory().getAbsolutePath()+"/melyrics";
-                File file = new File(appHome);
-                if(!file.exists()){
-                    file.mkdir();
-                }
-                String filePath = appHome + File.separator + fileName + ".jpg";
-                try {
-                    lyricsCard.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(filePath));
-                    Toast.makeText(getBaseContext(), "Saved at : sdcard/melyrics/" + fileName + ".jpg",Toast.LENGTH_LONG).show();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                    Log.i("tag","error");
+                //判断SD卡是否可用
+                if (android.os.Environment.getExternalStorageState().equals(
+                        android.os.Environment.MEDIA_MOUNTED)) {
+                    //建立文件夹
+                    String appHome = Environment.getExternalStorageDirectory().getAbsolutePath()+"/melyrics";
+                    File file = new File(appHome);
+                    if(!file.exists()){
+                        file.mkdir();
+                    }
+                    String filePath = appHome + File.separator + fileName + ".jpg";
+                    Uri uri = Uri.parse(filePath);
+                    try {
+                        lyricsCard.compress(Bitmap.CompressFormat.JPEG, 100, new FileOutputStream(filePath));
+                        Toast.makeText(getBaseContext(), "Saved at : sdcard/melyrics/" + fileName + ".jpg",Toast.LENGTH_LONG).show();
+                        showShareDialog(uri);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                        Log.i("tag","error");
+                    }
+                } else {
+                    Toast.makeText(getBaseContext(), "SD card is not usable !",Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
-
-    //after save the file choose to share,create a new dialog style
-    private void showShareDialog() {
-
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
-        final View layout = inflater.inflate(R.layout.share_dialog,
-                (ViewGroup) findViewById(R.id.sharing_to));
-        AlertDialog.Builder builder;
-        final Dialog alertDialog;
-        builder = new AlertDialog.Builder(this);
-        builder.setView(layout);
-        builder.setTitle("Sharing to");
-        alertDialog = builder.create();
-        alertDialog.show();
-        Button cancle_share;
-        ImageView facebook_share = (ImageView)layout.findViewById(R.id.facebook);
-        ImageView instagram = (ImageView)layout.findViewById(R.id.instgram);
-        cancle_share = (Button)layout.findViewById(R.id.not_now_share);
-
-        View.OnClickListener sharingListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()){
-                    case R.id.facebook:
-                        shareImage(loadBitmapFromView(containerView));
-                        break;
-                    case R.id.instgram:
-                        shareImageToWechat();
-                        break;
-                    case R.id.not_now_share:
-                        alertDialog.dismiss();
-                        layout.setVisibility(View.GONE);
-                }
-            }
-        };
-        cancle_share.setOnClickListener(sharingListener);
-        facebook_share.setOnClickListener(sharingListener);
-    }
-//should use the url of the file
-    private void shareImageToWechat() {
-        Intent intent = new Intent();
-        ComponentName comp = new ComponentName("com.tencent.mm","com.tencent.mm.ui.tools.ShareToTimeLineUI");
-        intent.setComponent(comp);
-        intent.setAction(Intent.ACTION_SEND);
-        intent.setType("image/*");
-        //intent.putExtra(Intent.EXTRA_STREAM,Uri.fromFile(file));//there is no file path yet
-        startActivity(intent);
-
-    }
-//不知道这个会出现什么。。。应该是调用系统自带的软件进行分享
-    private void shareImage(Bitmap shareImage) {
-        Intent share = new Intent(Intent.ACTION_SEND);
-        share.setType("image/*");
-        share.putExtra(Intent.EXTRA_STREAM,shareImage);
-        startActivity(Intent.createChooser(share,"Share Image!"));
-    }
-
 
     //以时间给文件命名
     private String getFileName() {
@@ -525,4 +478,45 @@ public class CustomizeCardActivity extends AppCompatActivity {
                     }
                 }).show();
     }
+
+    //after save the file choose to share,create a new dialog style
+    private void showShareDialog(final Uri uri) {
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
+            final View layout = inflater.inflate(R.layout.share_dialog,
+                            (ViewGroup) findViewById(R.id.sharing_to));
+            AlertDialog.Builder builder;
+            final Dialog alertDialog;
+            builder = new AlertDialog.Builder(this);
+            builder.setView(layout);
+            builder.setTitle("Sharing");
+            alertDialog = builder.create();
+            Button cancle_share;
+            ImageView image_share = (ImageView)layout.findViewById(R.id.img_finished);
+            image_share.setImageBitmap(loadBitmapFromView(containerView));
+            cancle_share = (Button)layout.findViewById(R.id.not_now_share);
+            alertDialog.show();
+            View.OnClickListener sharingListener = new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                            switch (v.getId()){
+                                case R.id.img_finished:
+                                    shareImage(uri);
+                                    break;
+                                case R.id.not_now_share:
+                                    alertDialog.dismiss();
+                                    layout.setVisibility(View.GONE);
+                            }
+                        }
+                };
+            cancle_share.setOnClickListener(sharingListener);
+            image_share.setOnClickListener(sharingListener);
+        }
+
+        //调用系统自带的软件进行分享
+        private void shareImage(Uri uri) {
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.setType("image/*");
+            share.putExtra(Intent.EXTRA_STREAM,uri);
+            startActivity(Intent.createChooser(share,"Share Image to"));
+        }
 }

@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.dom4j.Document;
@@ -139,13 +139,13 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
     private void showOperate() {
         bottom_Menu.setVisibility(View.VISIBLE);
         // 返回和创建卡片按钮初始化及点击监听
-        TextView textView_Back = (TextView) findViewById(R.id.operate_back);
+        ImageView img_Back = (ImageView) findViewById(R.id.operate_back);
         //style 1最多4句，2不限，3最多两句
-        TextView textView_Style1 = (TextView) findViewById(R.id.operate_style1);
-        TextView textView_Style2 = (TextView) findViewById(R.id.operate_style2);
-        TextView textView_Style3 = (TextView) findViewById(R.id.operate_style3);
+        ImageView img_Style1 = (ImageView) findViewById(R.id.operate_style1);
+        ImageView img_Style2 = (ImageView) findViewById(R.id.operate_style2);
+        ImageView img_Style3 = (ImageView) findViewById(R.id.operate_style3);
 
-        textView_Back.setOnClickListener(new View.OnClickListener() {
+        img_Back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isShow) {
@@ -161,7 +161,7 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
                 }
             }
         });
-        textView_Style1.setOnClickListener(new View.OnClickListener() {
+        img_Style1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //musixmatch音乐风格创建歌词卡片
@@ -185,7 +185,7 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
                 }
             }
         });
-        textView_Style2.setOnClickListener(new View.OnClickListener() {
+        img_Style2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //网易云音乐风格创建卡片
@@ -206,7 +206,7 @@ public class DisplayLyricsActivity extends AppCompatActivity implements Adapter.
                 startActivity(intent);
             }
         });
-        textView_Style3.setOnClickListener(new View.OnClickListener() {
+        img_Style3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 choosen_Lyrics = "";

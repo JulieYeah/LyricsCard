@@ -6,19 +6,21 @@
     android:orientation="vertical">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="16dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_search_category_default"
+            android:src="@mipmap/melyrics_search"
             android:id="@+id/search_icon"/>
+
         <EditText
             android:layout_toRightOf="@+id/search_icon"
-            android:paddingLeft="10sp"
+            android:layout_marginLeft="10sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Search for lyrics"
+            android:hint="Please input the song name..."
             android:id="@+id/search_input"
             android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"
             android:maxLines="1" />
@@ -28,8 +30,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/search_input"
-            android:layout_alignBottom="@+id/search_input"
-            app:srcCompat="@android:drawable/ic_delete"
+            android:layout_marginLeft="10sp"
+            android:layout_alignBottom="@+id/search_icon"
+            android:src="@mipmap/close"
             android:id="@+id/delete_input"
             android:visibility="visible"/>
 
@@ -38,14 +41,16 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
         android:id="@+id/search_list"
         android:visibility="gone">
     </ListView>
     <ImageView
         android:id="@+id/not_found"
-        android:src="@drawable/not_found"
+        android:src="@mipmap/not_found"
         android:visibility="gone"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
 
 </LinearLayout>
