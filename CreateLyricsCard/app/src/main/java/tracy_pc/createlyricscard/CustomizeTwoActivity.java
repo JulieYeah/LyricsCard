@@ -454,6 +454,9 @@ public class CustomizeTwoActivity extends AppCompatActivity {
                     case R.id.not_now_share:
                         alertDialog.dismiss();
                         layout.setVisibility(View.GONE);
+                        CustomizeTwoActivity.this.finish();
+                        Intent intent = new Intent(getBaseContext(),StartActivity.class);
+                        startActivity(intent);
                 }
             }
         };

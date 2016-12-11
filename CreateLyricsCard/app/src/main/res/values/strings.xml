@@ -5,7 +5,7 @@
     <string name="title_activity_customize_card">Customize</string>
     <string name="title_activity_customize_two">Customize</string>
     <string name="title_activity_customize_three">Customize</string>
-        <string name="about_us">
+    <string name="about_us">
         Me-lyric is an image-based lyric share app, combing the feature of the lyric sharing function from a Music Player and Image-editing function from an image share App.
             \n\nDeveloped by Tracy and Julie,
             \nas course project, as a start not an end.

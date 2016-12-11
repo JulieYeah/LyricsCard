@@ -505,6 +505,9 @@ public class CustomizeCardActivity extends AppCompatActivity {
                                 case R.id.not_now_share:
                                     alertDialog.dismiss();
                                     layout.setVisibility(View.GONE);
+                                    CustomizeCardActivity.this.finish();
+                                    Intent intent = new Intent(getBaseContext(),StartActivity.class);
+                                    startActivity(intent);
                             }
                         }
                 };

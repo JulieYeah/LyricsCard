@@ -8,6 +8,13 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="tracy_pc.createlyricscard.AboutUsActivity">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
     <TextView
         android:layout_width="wrap_content"
@@ -22,6 +29,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/textView_2"
         android:text="\n—— 林夕「 歌颂 」"
         android:textSize="20sp"
         android:layout_below="@+id/textView"
@@ -32,11 +40,16 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
-        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_below="@+id/textView_2"
         android:text="Back"
         android:textColor="#ffffff"
         android:id="@+id/btn_back"
         android:background="@drawable/melyrics_button"
         android:layout_centerInParent="true" />
+
+        </RelativeLayout>
+    </ScrollView>
 
 </RelativeLayout>

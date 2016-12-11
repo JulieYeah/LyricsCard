@@ -30,6 +30,7 @@ public class LyricsSearchActivity extends AppCompatActivity {
     //the api used:
     private String get_original_url = "http://tingapi.ting.baidu.com/v1/restserver/ting?format=xml&calback=&from=webapp_music&method=baidu.ting.search.catalogSug&query=";
     private String get_id_url = "";
+    private ImageView not_found;
     EditText inputSearch;
     ListView lyric_list;
 
@@ -44,6 +45,8 @@ public class LyricsSearchActivity extends AppCompatActivity {
         lyric_list.setVisibility(View.INVISIBLE);
         final ImageView deletInput = (ImageView) findViewById(R.id.delete_input);
         deletInput.setVisibility(View.INVISIBLE);
+        not_found = (ImageView)findViewById(R.id.not_found);
+        not_found.setVisibility(View.GONE);
 
         //onclicklistener to choose the song
         lyric_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -62,6 +65,7 @@ public class LyricsSearchActivity extends AppCompatActivity {
         deletInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                not_found.setVisibility(View.GONE);
                 inputSearch.setText("");
             }
         });
@@ -78,6 +82,7 @@ public class LyricsSearchActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 //after every change of the input,send the request to get available lyrics
                 if (s.length() == 0) {
+                    lyric_list.setVisibility(View.INVISIBLE);
                     deletInput.setVisibility(View.GONE);
                 } else {//only search for result after entering two character
                     get_id_url = get_original_url + s;
@@ -146,11 +151,10 @@ public class LyricsSearchActivity extends AppCompatActivity {
 
     Handler handler = new Handler() {
         public void handleMessage(Message msg) {
-            ImageView not_found = (ImageView)findViewById(R.id.not_found);
+            not_found.setVisibility(View.GONE);
             switch (msg.what) {
                 case 0://set the dataset for the adapter for the listview
                     lyric_list.setVisibility(View.VISIBLE);
-                    not_found.setVisibility(View.GONE);
                     SimpleAdapter adapter = new SimpleAdapter(getBaseContext(), (ArrayList<Map<String, Object>>) msg.obj, R.layout.lyric_list, new String[]{"songid", "Songs"}, new int[]{R.id.songid, R.id.songs});
                     lyric_list.setAdapter(adapter);
                     break;
