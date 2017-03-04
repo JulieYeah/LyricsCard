@@ -79,6 +79,7 @@ public class LyricsSearchActivity extends AppCompatActivity {
                 //after every change of the input,send the request to get available lyrics
                 if (s.length() == 0) {
                     deletInput.setVisibility(View.GONE);
+                    lyric_list.setVisibility(View.INVISIBLE);
                 } else {//only search for result after entering two character
                     get_id_url = get_original_url + s;
                     new Thread(new Runnable() {

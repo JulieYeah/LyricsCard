@@ -25,6 +25,8 @@ public class StartActivity extends AppCompatActivity {
         int screenWidth = wm.getDefaultDisplay().getWidth();
         int screenHeight = screenWidth * 75 / 100;
         img_Welcome.setLayoutParams(new RelativeLayout.LayoutParams(screenWidth,screenHeight));
+        RelativeLayout.LayoutParams par = (RelativeLayout.LayoutParams)img_Welcome.getLayoutParams();
+        System.out.println(par.leftMargin);
 
         Button btn_start = (Button)findViewById(R.id.btn_start);
         Button btn_about_us = (Button)findViewById(R.id.btn_about_us);
