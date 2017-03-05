@@ -456,6 +456,9 @@ public class CustomizeThreeActivity extends AppCompatActivity {
                     case R.id.not_now_share:
                         alertDialog.dismiss();
                         layout.setVisibility(View.GONE);
+                        CustomizeThreeActivity.this.finish();
+                        Intent intent = new Intent(getBaseContext(),StartActivity.class);
+                        startActivity(intent);
                 }
             }
         };

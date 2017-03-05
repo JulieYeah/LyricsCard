@@ -1,8 +1,10 @@
 package tracy_pc.createlyricscard;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
@@ -47,5 +49,28 @@ public class StartActivity extends AppCompatActivity {
         };
         btn_start.setOnClickListener(listener);
         btn_about_us.setOnClickListener(listener);
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(StartActivity.this).setTitle("Exit ？")
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 点击“Yes”退出应用
+                        android.os.Process.killProcess(android.os.Process.myPid());
+                        System.exit(0);
+
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 点击“Cancel”后的操作,这里不设置没有任何操作,继续编辑
+                    }
+                }).show();
     }
 }
